@@ -245,7 +245,14 @@ class Student : private std::string, private std::valarry<double>
 
 #### 虚基类
 
-&emsp;虚基类使得从多个类派生出的对象`只继承一个`基类对象。
+&emsp;虚基类使得从多个类派生出的对象`只继承一个`基类对象。在派生类继承基类时，加上virtual关键词前缀以使用虚基类继承。
+```cpp
+class derive:virtual public base
+{
+  ···
+};
+```
+
 
 > 使用关键字`virtual`定义Worker,SingingWaiter对象将只包含Worker对象的一个副本。
 
@@ -260,3 +267,31 @@ class Student : private std::string, private std::valarry<double>
 SingingWaiter(const Worker & wk, int p=0, int v=Singer::other)
               : Worker(wk), Waiter(wk,p), Singer(wk,v) {}
 ```
+
+#### 函数调用的二义性
+
+&emsp;多重继承可能导致函数调用的二义性。派生类可能从不同的两个基类继承两个完全不同的同名方法。
+
+可以使用域解析运算符来澄清编程者的意图：
+
+```cpp
+SingingWaiter newhire();
+newhire.Singer::Show();
+```
+
+更好的方法是**在派生类中重新定义该方法**。
+
+#### 其他有关MI的问题
+
++ **混合使用虚基类和非虚基类**
+
+  &emsp;当类通过多条虚途径和非虚途径继承某个特定的基类时，该类将包含一个表示所有的需途经的基类子对象和分别表示各条非虚途径的多个基类子对象。
+
++ **虚基类和支配**
+
+  &emsp;使用虚基类将改变C++解析二义性的方式。派生类中的名称优先于直接或间接祖先类中的相同名。而对于同名成员或方法，优先使用优先级高于其他所有名称的，这样将不会出现二义性。
+
+  > 通过优先规则解决二义性
+  
+  &emsp;虚二义性规则与访问规则无关。即便基类的方法是私有的，但仍可能导致二义性。
+
