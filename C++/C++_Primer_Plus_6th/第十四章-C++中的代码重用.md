@@ -260,3 +260,176 @@ class Student : private std::string, private std::valarry<double>
 SingingWaiter(const Worker & wk, int p=0, int v=Singer::other)
               : Worker(wk), Waiter(wk,p), Singer(wk,v) {}
 ```
+
+---
+
+### 类模板
+
+&emsp;**模板**提供**参数化**类型(即能够将类型名作为参数传递给接收方来建立类或函数)。
+
+> C++库提供了多个模板类，例如：`valarray`、`vector`、`Queue`等。
+
+&emsp;模板类定义：
+```cpp
+template <typename Type>
+```
+
+> 关键字`template`告诉编译器，将要定义一个模板。
+
+应用模板时，需将类限定符从`Classname::`改为`Classname<Type>::`。
+
+例如：
+```cpp
+template <typename T>
+bool Stack<T>::push(const T & item)
+{
+  ···
+}
+```
+
+#### 指针栈
+
+&emsp;正确使用指针栈：让调用程序提供一个指针数组，其中每个指针都指向不同的对象。
+
+#### 非类型参数
+
+对于模板头：
+```cpp
+templatre <class T, int n>
+```
+
+关键字`class`指出`T`为类型参数，`int`指出`n`的类型为int。这种参数（指定特殊的类型而不是用作泛型名）成为**非类型**或**表达式**参数。
+
+&emsp;在编译器定义名为`ArrayTP<double, 12>`的类时，编译器使用`double`替换`T`，使用`12`替换`n`。
+
+模板代码不能修改参数的值，也不能使用参数的地址。
+
+表达式参数有着限制，只能为以下类型的参数：
++ 整形
++ 枚举
++ 引用
++ 指针
+
+> 因此 `double m` 不合法，但是 `double *rm` 是合法的。
+
+---
+
+### 模板多功能性
+
+#### 递归使用模板
+
+对于模板定义，可以这样写：
+```cpp
+ArrayTP< ArrayTP<int,5>, 10 > twodee;
+```
+
+这使得`twodee`是一个包含10个元素的数组，其中每个元素都是一个包含5个`int`元素的数组。
+
+与之等价的常规数组声明如下：
+```cpp
+int twodee[10][5]
+```
+
+> 在模板语法中，维的顺序和等价的二维数组相反。
+
+#### 使用多个类型参数
+
+```cpp
+template< class T1, class T2 >
+```
+
+#### 默认类型模板参数
+
+如果省略T2的值，编译器将使用`double`替代。
+```cpp
+template< class T1, class T2=double >
+```
+
+> 可以为类模板类型参数提供默认值，但不能为函数模板参数提供默认值。
+
+> 可以为非类型参数提供默认值。
+
+---
+
+#### 成员模板
+
+> 模板可用作结构、类或模板类的成员。
+
+#### 将模板用作参数
+
+> 模板还可以包含本身就是模板的参数。
+
+---
+### 模板类和友元
+
+模板的友元分为3类：
++ **非模板友元**
++ **约束模板友元:**友元的类型取决于类被实例化时的类型
++ **非约束模板友元:**友元的所有具体化都是类的每一个具体化的友元
+
+1. 非模板友元函数
+
+`counts()`函数将成为模板所有实例化的友元：
+```cpp
+template<class T>
+class HasFriend
+{
+  public:
+    friend void counts();
+    ···
+};
+```
+
+2. 约束模板友元
+
+&使友元函数本身成为模板——即要使类的每一个具体化都获得与友元匹配的具体化：
+
+```cpp
+template<typename T> void counts();
+template<typename T> void report(T &);
+
+template<typename TT>
+class HasFriendT
+{
+  ···
+  friend void counts<TT>();
+  friend void report<>(HasFriendT<TT> &);
+  ···
+};
+```
+
+声明中的`<>`指出这是模板具体化。对于`report()`，<>内可以为空(编译器自动推断)，也可以使用`HasFriendT<TT>`
+
+3. 非约束模板友元函数
+
+每个函数具体化都是每个类具体化的友元：
+```cpp
+template<typename T>
+
+class ManyFriend
+{
+  ···
+  template<typename C, typename D> friend void show2(C &, D &);
+
+};
+```
+
+#### 模板别名
+
+使用`typedef`为模板具体化指定别名：
+```cpp
+typedef std::array<double, 12> arrd;
+```
+
+使用模板提供一系列别名：
+```cpp
+template<typename T>
+  using arrtype = std::array<T, 12>;
+
+arrtype<double> gallons;
+arrtype<int> days;
+```
+
+
+
+
