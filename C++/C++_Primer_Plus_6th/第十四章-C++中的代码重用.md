@@ -245,7 +245,14 @@ class Student : private std::string, private std::valarry<double>
 
 #### 虚基类
 
-&emsp;虚基类使得从多个类派生出的对象`只继承一个`基类对象。
+&emsp;虚基类使得从多个类派生出的对象`只继承一个`基类对象。在派生类继承基类时，加上virtual关键词前缀以使用虚基类继承。
+```cpp
+class derive:virtual public base
+{
+  ···
+};
+```
+
 
 > 使用关键字`virtual`定义Worker,SingingWaiter对象将只包含Worker对象的一个副本。
 
