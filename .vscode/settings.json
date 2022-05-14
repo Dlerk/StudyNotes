@@ -18,6 +18,8 @@
         "functional": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "system_error": "cpp"
-    }
+        "system_error": "cpp",
+        "valarray": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }
