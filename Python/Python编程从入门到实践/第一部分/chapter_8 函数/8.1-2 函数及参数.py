@@ -9,6 +9,7 @@ greet_user()
 
 # 位置实参
 # 最简单的关联方式是基于实参的顺序，这种关联方式称为位置实参
+# 与C/C++格式的函数调用相同
 
 def describe_pet(animal_type, pet_name):
     """显示宠物的信息。"""
